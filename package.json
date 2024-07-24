@@ -8,7 +8,8 @@
     "start": "node src/index.js",
     "dev": "nodemon src/readFile.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate": "node src/Study_In_the_mentor/scripts/generateProducts.js"
+    "generate": "node src/Study_In_the_mentor/scripts/generateProducts.js",
+    "add-one": "node src/Study_In_the_mentor/scripts/addOneProduct.js"
   },
   "keywords": [],
   "author": "Serhii Reshetniak",
