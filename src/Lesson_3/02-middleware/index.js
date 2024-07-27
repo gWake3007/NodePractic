@@ -1,6 +1,14 @@
 import express from 'express';
+import pinoHTTP from 'pino-http';
 
 const app = express();
+const pino = pinoHTTP({
+  transport: {
+    target: 'pino-pretty',
+  },
+});
+
+app.use(pino);
 
 app.use((req, res, next) => {
   console.log({ Method: req.method });
@@ -38,8 +46,15 @@ app.get('/', (req, res) => {
   res.send('middleware message');
 });
 
+//?Page not found 404.
 app.use((req, res, next) => {
   res.status(404).send({ status: 404, message: 'Route not found :(' });
+});
+
+//?Вивід помилки 500 для користувача щоб не було більш детальної інформації про сервер користувачеві а тільки цей message.
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).send({ status: 500, message: 'Internal server Error!' });
 });
 
 app.listen(8080, () => {

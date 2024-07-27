@@ -5,6 +5,8 @@
     "esquery",
     "esrecurse",
     "nodepractic",
+    "pino",
+    "pinoHTTP",
     "Reshetniak",
     "respons",
     "Serhii",
