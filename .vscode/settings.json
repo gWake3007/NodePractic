@@ -4,6 +4,7 @@
     "espree",
     "esquery",
     "esrecurse",
+    "next",
     "nodepractic",
     "pino",
     "pinoHTTP",
