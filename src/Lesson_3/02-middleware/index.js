@@ -32,8 +32,14 @@ app.use('/not-found', middlewareB);
 //   next();
 // });
 
+//?Коли ми робимо res.send без next() то коли ми доходимо до цього middleware то далі запит в нас не йде.Тобто при звичайному запиті в нас буде месседж (middleware message) а при сторінці /not-found буде месседж (Route not found :()).Також middleware останній з помилкою 404 є глобальний і має бути останнім. Щоб не спрацьовувати коли помилки немає!!!
 app.get('/', (req, res) => {
+  console.log(undefined.unknwon());
   res.send('middleware message');
+});
+
+app.use((req, res, next) => {
+  res.status(404).send({ status: 404, message: 'Route not found :(' });
 });
 
 app.listen(8080, () => {
