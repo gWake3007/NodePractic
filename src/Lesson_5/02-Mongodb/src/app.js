@@ -30,3 +30,5 @@ app.get('/students/:id', async (req, res) => {
     console.error(error);
   }
 });
+
+export default app;
