@@ -1,6 +1,8 @@
 import express from 'express';
 
 import studentRoutes from './routes/students.js';
+import { errorHandler } from './middlewares/errorHandler.js';
+import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const app = express();
 
@@ -8,8 +10,8 @@ const app = express();
 app.use('/students', studentRoutes);
 
 //?Робимо middleware для запитів на неіснуючий Роут.next - ми не використовуємо тому що нам нікуди далі іти але він має бути!
-app.use((req, res, next) => {
-  res.status(404).send({ status: 404, message: 'Not found!' });
-});
+app.use(notFoundHandler);
+
+app.use(errorHandler);
 
 export default app;

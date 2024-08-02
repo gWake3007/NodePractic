@@ -1,17 +1,16 @@
 import { getStudents, getStudent } from '../services/students.js';
 
-export async function getStudentsController(req, res) {
+export async function getStudentsController(req, res, next) {
   try {
     const students = await getStudents();
 
     res.send({ status: 200, data: students });
   } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Internal Server Error!' });
+    next(error);
   }
 }
 
-export async function getStudentController(req, res) {
+export async function getStudentController(req, res, next) {
   try {
     //?За допомогою деструкторизація з request дістаємо динамічний параметр id.
     const { id } = req.params;
@@ -24,6 +23,8 @@ export async function getStudentController(req, res) {
     }
     res.send({ status: 200, data: student });
   } catch (error) {
-    console.error(error);
+    next(error);
   }
 }
+
+//?next(error) - замість того щоб в цьому файлі обробляти помилку 500 в catch передаємо туди next(error) та обробляємо її в app.js
