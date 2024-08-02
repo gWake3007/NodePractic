@@ -1,34 +1,15 @@
 import express from 'express';
-import { Student } from './models/students.js';
+
+import studentRoutes from './routes/students.js';
 
 const app = express();
 
-app.get('/students', async (req, res) => {
-  try {
-    const students = await Student.find();
+//?Тут ми всі роути students підключаємо як middleware.Додаємо аргумент '/students' щоб у файлі де прописані роути його прибрати.
+app.use('/students', studentRoutes);
 
-    res.send({ status: 200, data: students });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: 'Internal Server Error!' });
-  }
-});
-
-app.get('/students/:id', async (req, res) => {
-  try {
-    //?За допомогою деструкторизація з request дістаємо динамічний параметр id.
-    const { id } = req.params;
-    //?findById() - Повертає або об'єкт який він знайшов або null.
-    const student = await Student.findById(id);
-    if (student === null) {
-      return res
-        .status(404)
-        .send({ status: 404, message: 'Student not found!' });
-    }
-    res.send({ status: 200, data: student });
-  } catch (error) {
-    console.error(error);
-  }
+//?Робимо middleware для запитів на неіснуючий Роут.next - ми не використовуємо тому що нам нікуди далі іти але він має бути!
+app.use((req, res, next) => {
+  res.status(404).send({ status: 404, message: 'Not found!' });
 });
 
 export default app;
