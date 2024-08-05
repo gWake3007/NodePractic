@@ -6,6 +6,9 @@ import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const app = express();
 
+//?Ця middleware потрібна для того щоб розпарсити на body.Тобто щоб можна було робити POST запити.(Але вважається поганим тоном та передається через роути)
+// app.use(express.json());
+
 //?Тут ми всі роути students підключаємо як middleware.Додаємо аргумент '/students' щоб у файлі де прописані роути його прибрати.
 app.use('/students', studentRoutes);
 
