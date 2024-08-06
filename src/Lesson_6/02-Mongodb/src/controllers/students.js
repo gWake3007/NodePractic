@@ -6,6 +6,7 @@ import {
   createStudent,
   deleteStudent,
   updateStudent,
+  changeStudentDuty,
 } from '../services/students.js';
 
 export async function getStudentsController(req, res) {
@@ -68,11 +69,32 @@ export async function updateStudentController(req, res, next) {
   };
 
   const update = await updateStudent(id, student);
-  if (update === null) {
+  if (update.lastErrorObject.updatedExisting === true) {
+    return res.status(200).send({
+      status: 200,
+      message: `Update student ${id}`,
+      data: update.value,
+    });
+  }
+  res
+    .status(201)
+    .send({ status: 201, message: 'Student created', data: update.value });
+}
+
+export async function changeStudentDutyController(req, res, next) {
+  const { id } = req.params;
+  const { duty } = req.body;
+
+  const changeOnDuty = await changeStudentDuty(id, duty);
+
+  if (changeOnDuty === null) {
     return next(createHttpError.NotFound('Student not found!'));
   }
-  console.log({ update });
   res
     .status(200)
-    .send({ status: 200, message: `Update student ${id}`, data: update });
+    .send({
+      status: 200,
+      message: 'Student onDuty changed!',
+      data: changeOnDuty.value,
+    });
 }

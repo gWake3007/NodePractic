@@ -5,6 +5,7 @@ import {
   createStudentController,
   deleteStudentController,
   updateStudentController,
+  changeStudentDutyController,
 } from '../controllers/students.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
@@ -22,5 +23,7 @@ router.post('/', jsonParser, ctrlWrapper(createStudentController));
 router.delete('/:id', ctrlWrapper(deleteStudentController));
 
 router.put('/:id', jsonParser, ctrlWrapper(updateStudentController));
+
+router.patch('/:id/duty', jsonParser, ctrlWrapper(changeStudentDutyController));
 
 export default router;
