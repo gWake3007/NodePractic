@@ -14,7 +14,9 @@ export async function getProductsController(req, res) {
 
 export async function getProductController(req, res, next) {
   const { id } = req.params;
+
   const product = await getProduct(id);
+
   if (product === null) {
     return next(createHttpError.NotFound('Product not found!'));
   }

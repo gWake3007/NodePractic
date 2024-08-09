@@ -1,9 +1,9 @@
 import { Product } from '../db/models/product.js';
 
-export function getProducts() {
-  return Product.find();
+export async function getProducts() {
+  return await Product.find();
 }
 
-export function getProduct(productId) {
-  return Product.findById(productId);
+export async function getProduct(id) {
+  return await Product.findById(id);
 }
