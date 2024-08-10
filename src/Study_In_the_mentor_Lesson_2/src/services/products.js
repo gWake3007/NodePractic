@@ -8,3 +8,14 @@ export async function getProducts() {
 export async function getProduct(id) {
   return await Product.findOne({ _id: id });
 }
+
+export async function createProduct(payload) {
+  return await Product.create(payload);
+}
+
+export async function updateProduct(id, changed) {
+  return await Product.findByIdAndUpdate(id, changed, {
+    new: true,
+    runValidators: true,
+  });
+}
