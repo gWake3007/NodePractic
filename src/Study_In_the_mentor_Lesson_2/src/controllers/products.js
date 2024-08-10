@@ -5,6 +5,7 @@ import {
   getProducts,
   createProduct,
   updateProduct,
+  deleteProduct,
 } from '../services/products.js';
 
 export async function getProductsController(req, res) {
@@ -59,11 +60,24 @@ export async function updateProductController(req, res, next) {
     return next(createHttpError.NotFound('Product not found!'));
   }
 
-  res
-    .status(200)
-    .send({
-      status: 200,
-      message: 'Successfully patched a product!',
-      data: changedProduct,
-    });
+  res.status(200).send({
+    status: 200,
+    message: 'Successfully patched a product!',
+    data: changedProduct,
+  });
+}
+
+export async function deleteProductController(req, res, next) {
+  const { id } = req.params;
+
+  const deletedProduct = await deleteProduct(id);
+  if (deletedProduct === null) {
+    return next(createHttpError.NotFound('Product not found!'));
+  }
+
+  res.status(200).send({
+    status: 200,
+    message: `Product with id ${id} is deleted!`,
+    data: deletedProduct,
+  });
 }

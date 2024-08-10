@@ -19,3 +19,7 @@ export async function updateProduct(id, changed) {
     runValidators: true,
   });
 }
+
+export async function deleteProduct(id) {
+  return await Product.findByIdAndDelete(id);
+}

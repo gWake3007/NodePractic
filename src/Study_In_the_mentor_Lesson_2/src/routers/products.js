@@ -5,6 +5,7 @@ import {
   getProductController,
   createProductController,
   updateProductController,
+  deleteProductController,
 } from '../controllers/products.js';
 
 const router = Router();
@@ -16,5 +17,7 @@ router.get('/products/:id', ctrlWrapper(getProductController));
 router.post('/products', ctrlWrapper(createProductController));
 
 router.patch('/products/:id', ctrlWrapper(updateProductController));
+
+router.delete('/products/:id', ctrlWrapper(deleteProductController));
 
 export default router;
