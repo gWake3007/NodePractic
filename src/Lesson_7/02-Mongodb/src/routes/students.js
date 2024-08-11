@@ -9,6 +9,9 @@ import {
 } from '../controllers/students.js';
 
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
+import { isValidId } from '../middlewares/isValidId.js';
+import { validateBody } from '../middlewares/validateBody.js';
+import { studentSchema, studentDutySchema } from '../validation/student.js';
 
 const router = express.Router();
 //?jsonParser - вважається таким чином краще передавати express.json(). Замість того щоб це робити через app.
@@ -16,14 +19,31 @@ const jsonParser = express.json();
 
 router.get('/', ctrlWrapper(getStudentsController));
 
-router.get('/:id', ctrlWrapper(getStudentController));
+router.get('/:id', isValidId, ctrlWrapper(getStudentController));
 
-router.post('/', jsonParser, ctrlWrapper(createStudentController));
+router.post(
+  '/',
+  jsonParser,
+  validateBody(studentSchema),
+  ctrlWrapper(createStudentController),
+);
 
 router.delete('/:id', ctrlWrapper(deleteStudentController));
 
-router.put('/:id', jsonParser, ctrlWrapper(updateStudentController));
+router.put(
+  '/:id',
+  isValidId,
+  jsonParser,
+  validateBody(studentSchema),
+  ctrlWrapper(updateStudentController),
+);
 
-router.patch('/:id/duty', jsonParser, ctrlWrapper(changeStudentDutyController));
+router.patch(
+  '/:id/duty',
+  isValidId,
+  jsonParser,
+  validateBody(studentDutySchema),
+  ctrlWrapper(changeStudentDutyController),
+);
 
 export default router;

@@ -9,9 +9,7 @@ import {
   changeStudentDuty,
 } from '../services/students.js';
 
-import { studentSchema } from '../validation/student.js';
-
-export async function getStudentsController(req, res) {
+export async function getStudentsController(_req, res) {
   const students = await getStudents();
 
   res.send({ status: 200, data: students });
@@ -40,21 +38,7 @@ export async function createStudentController(req, res) {
     year: req.body.year,
   };
 
-  //? abortEarly: false } - це опція яка за замовчуванням завжди true(abortEarly-припини раніше) тобто валідація закінчує перевірку на першій же помилці.Для того щоб в консолі побачити всі помилки валідації її треба поставити на false!!!
-  const result = studentSchema.validate(student, { abortEarly: false });
-
-  if (typeof result.error !== 'undefined') {
-    console.log(result.error);
-    return res.status(400).send({
-      status: 400,
-      message: 'Validation Error!',
-      data: result.error.details.map((err) => err.message).join(', '),
-    });
-  }
-
-  //?Важливий момент з error в консолі. ЗВЕРТАЙ УВАГУ!!!
-  // console.log({ result });
-
+  //?result.value - краще одразу з цим value працювати щоб joi сам виправляв такі помилки як Number обгорнений в лапки тощо.
   const createdStudent = await createStudent(student);
 
   res
@@ -75,6 +59,7 @@ export async function deleteStudentController(req, res, next) {
   res.status(204).end();
 }
 
+// eslint-disable-next-line no-unused-vars
 export async function updateStudentController(req, res, next) {
   const { id } = req.params;
 
@@ -110,6 +95,6 @@ export async function changeStudentDutyController(req, res, next) {
   res.status(200).send({
     status: 200,
     message: 'Student onDuty changed!',
-    data: changeOnDuty.value,
+    data: changeOnDuty,
   });
 }
