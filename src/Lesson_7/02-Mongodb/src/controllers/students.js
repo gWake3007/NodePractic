@@ -9,6 +9,8 @@ import {
   changeStudentDuty,
 } from '../services/students.js';
 
+import { studentSchema } from '../validation/student.js';
+
 export async function getStudentsController(req, res) {
   const students = await getStudents();
 
@@ -37,6 +39,21 @@ export async function createStudentController(req, res) {
     email: req.body.email,
     year: req.body.year,
   };
+
+  //? abortEarly: false } - це опція яка за замовчуванням завжди true(abortEarly-припини раніше) тобто валідація закінчує перевірку на першій же помилці.Для того щоб в консолі побачити всі помилки валідації її треба поставити на false!!!
+  const result = studentSchema.validate(student, { abortEarly: false });
+
+  if (typeof result.error !== 'undefined') {
+    console.log(result.error);
+    return res.status(400).send({
+      status: 400,
+      message: 'Validation Error!',
+      data: result.error.details.map((err) => err.message).join(', '),
+    });
+  }
+
+  //?Важливий момент з error в консолі. ЗВЕРТАЙ УВАГУ!!!
+  // console.log({ result });
 
   const createdStudent = await createStudent(student);
 
@@ -90,11 +107,9 @@ export async function changeStudentDutyController(req, res, next) {
   if (changeOnDuty === null) {
     return next(createHttpError.NotFound('Student not found!'));
   }
-  res
-    .status(200)
-    .send({
-      status: 200,
-      message: 'Student onDuty changed!',
-      data: changeOnDuty.value,
-    });
+  res.status(200).send({
+    status: 200,
+    message: 'Student onDuty changed!',
+    data: changeOnDuty.value,
+  });
 }
