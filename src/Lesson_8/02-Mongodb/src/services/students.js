@@ -1,13 +1,36 @@
 import { Student } from '../models/student.js';
 
-export async function getStudents({ page, perPage }) {
+export async function getStudents({
+  page,
+  perPage,
+  sortBy,
+  sortOrder,
+  filter,
+}) {
   //?Формула запитів на кожній сторінці.
   const skip = page > 0 ? (page - 1) * perPage : 0;
 
+  //?studentQuery - додається нижче до якого додаються всі фільтра.
+  const studentQuery = Student.find();
+
+  //?Метод .where() потрібен для фільтрації(точніше для визначення того що ми фільтруємо) .gte() якщо більше або рівне .lte() - меньше або рівне. ДЛЯ СЕБЕ!!!(gt() - більше, lt() - меньше).
+  if (typeof filter.minYear !== 'undefined') {
+    studentQuery.where('year').gte(filter.minYear);
+  }
+
+  if (typeof filter.maxYear !== 'undefined') {
+    studentQuery.where('year').lte(filter.maxYear);
+  }
+
   //?Щоб спростити иа пришвидшити код використовуємо метод Promise.all(для того щоб не писати декілька промісів а все вмістити в один).
-  const [student, count] = await Promise.all([
-    Student.find().skip(skip).limit(perPage),
-    Student.countDocuments(),
+  //?.sort({ [sortBy]: sortOrder }) - метод для сортування з деструкторизацією.
+  const [count, student] = await Promise.all([
+    //?Student.find().merge(studentQuery).countDocuments() - другий спосіб написання.
+    Student.countDocuments(studentQuery),
+    studentQuery
+      .sort({ [sortBy]: sortOrder })
+      .skip(skip)
+      .limit(perPage),
   ]);
 
   //?Метод skip() - потрібен для того щоб пропустити потрібну нам кількість елементів.Тобто по формулі вище skip.limit(perPage) - метод для загальної кількості елементів що потрібно пропустити на сторінку.

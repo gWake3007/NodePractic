@@ -9,13 +9,27 @@ import {
   updateStudent,
   changeStudentDuty,
 } from '../services/students.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export async function getStudentsController(req, res) {
   //?Через деструкторизацію дістаємо властивості з функції parsePaginationParams.
   const { page, perPage } = parsePaginationParams(req.query);
 
+  //?З імпортованої функції parseSortParams() - дістаємо параметри.
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+
+  //?parseFilterParams() - з імпортованої функції з utils також дістаємо параметри.
+  const filter = parseFilterParams(req.query);
+
   //?Та передаємо ці параметри в сервіс students!
-  const students = await getStudents({ page, perPage });
+  const students = await getStudents({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
 
   res.send({ status: 200, data: students });
 }
