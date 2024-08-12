@@ -1,4 +1,5 @@
 import createHttpError from 'http-errors';
+import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
 import {
   getStudents,
@@ -9,8 +10,12 @@ import {
   changeStudentDuty,
 } from '../services/students.js';
 
-export async function getStudentsController(_req, res) {
-  const students = await getStudents();
+export async function getStudentsController(req, res) {
+  //?Через деструкторизацію дістаємо властивості з функції parsePaginationParams.
+  const { page, perPage } = parsePaginationParams(req.query);
+
+  //?Та передаємо ці параметри в сервіс students!
+  const students = await getStudents({ page, perPage });
 
   res.send({ status: 200, data: students });
 }
