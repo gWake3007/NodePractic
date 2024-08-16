@@ -7,6 +7,7 @@ export async function registerUser(user) {
   if (maybeUser !== null) {
     throw createHttpError(409, 'Email already in User');
   }
+  return User.create(user);
 }
 
 //?Викликаємо throw замість return тому що таким чином код попадає в catch і далі через ctrlWrapper код іде по next замість закінчення.

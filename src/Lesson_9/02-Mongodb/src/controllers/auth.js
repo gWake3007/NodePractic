@@ -7,7 +7,7 @@ export async function registerController(req, res) {
     password: req.body.password,
   };
 
-  await registerUser(user);
+  const registeredUser = await registerUser(user);
 
-  res.send('Register');
+  res.send({ status: 200, message: 'User registered!', data: registeredUser });
 }
