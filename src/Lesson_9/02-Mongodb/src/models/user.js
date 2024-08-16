@@ -19,6 +19,14 @@ const userSchema = new mongoose.Schema(
   { versionKey: false, timestamps: true },
 );
 
+//?За допомогою цього скрипта робимо так щоб у відповіді при створенні юзера не відображався пароль!
+
+userSchema.methods.toJSON = function () {
+  const obj = this.toObject();
+  delete obj.password;
+  return obj;
+};
+
 const User = mongoose.model('User', userSchema);
 
 export { User };
