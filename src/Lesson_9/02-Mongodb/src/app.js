@@ -1,4 +1,5 @@
 import express from 'express';
+import cookieParser from 'cookie-parser';
 
 import authRoutes from './routes/auth.js';
 import studentRoutes from './routes/students.js';
@@ -6,6 +7,9 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const app = express();
+
+//?cookieParser - підключається глобально перед роутом authRoures!!
+app.use(cookieParser());
 
 //?Роути до аунтефікації(реєстрації).
 app.use('/auth', authRoutes);

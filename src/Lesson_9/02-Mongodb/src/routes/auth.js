@@ -15,7 +15,7 @@ router.post(
 );
 
 router.post(
-  'login',
+  '/login',
   jsonParser,
   validateBody(loginSchema),
   ctrlWrapper(loginController),
