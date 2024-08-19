@@ -1,4 +1,4 @@
-import { registerUser, loginUser } from '../services/auth.js';
+import { registerUser, loginUser, logoutUser } from '../services/auth.js';
 
 export async function registerController(req, res) {
   const user = {
@@ -35,6 +35,19 @@ export async function loginController(req, res) {
     message: 'Login completed!',
     data: { accessToken: session.accessToken },
   });
+}
+
+export async function logoutController(req, res) {
+  //?Тут в if ми якщо є сесія то її видаляємо.
+  if (typeof req.cookies.sessionId === 'string') {
+    await logoutUser(req.cookies.sessionId);
+  }
+  //?Тут видаляємо токен та айді з кукі
+  res.clearCookie('refreshToken');
+  res.clearCookie('sessionId');
+  // console.log(req.cookies);
+
+  res.status(204).end();
 }
 
 //?res.cookie('refreshToken', session.refreshToken, { httpOnly: true }); в кукі передаємо refreshToken і в опції вказуємо httpOnly: true щоб кукі передавалися тільки http запитами.

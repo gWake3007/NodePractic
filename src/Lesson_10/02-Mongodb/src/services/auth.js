@@ -47,6 +47,10 @@ export async function loginUser(email, password) {
   });
 }
 
+export function logoutUser(sessionId) {
+  return Session.deleteOne({ _id: sessionId });
+}
+
 //?bcrypt.compare(password, maybeUser.password); - паттерн з бібліотеки bcrypt для порівняння захешованого паролю з тим що ввів користувач!
 //?З бібліотеки crypto беремо метод  crypto.randomBytes(30).toString('base64'); для токенів.
 //?    accessTokenValidUntil: new Date(Date.now + ACCESS_TOKE_TTL),refreshTokenValidUntil: new Date(Date.now + REFRESH_TOKEN_TTL), - формули які визначають скільки часу будуть існувати наши токени!
