@@ -6,6 +6,7 @@ export async function getStudents({
   sortBy,
   sortOrder,
   filter,
+  parentId,
 }) {
   //?Формула запитів на кожній сторінці.
   const skip = page > 0 ? (page - 1) * perPage : 0;
@@ -21,6 +22,8 @@ export async function getStudents({
   if (typeof filter.maxYear !== 'undefined') {
     studentQuery.where('year').lte(filter.maxYear);
   }
+
+  student.where('parentId').equals(parentId);
 
   //?Щоб спростити иа пришвидшити код використовуємо метод Promise.all(для того щоб не писати декілька промісів а все вмістити в один).
   //?.sort({ [sortBy]: sortOrder }) - метод для сортування з деструкторизацією.

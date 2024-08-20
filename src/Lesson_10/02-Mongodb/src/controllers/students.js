@@ -29,12 +29,16 @@ export async function getStudentsController(req, res) {
     sortBy,
     sortOrder,
     filter,
+    parentId: req.user._id,
   });
 
   res.send({ status: 200, data: students });
 }
 
 export async function getStudentController(req, res, next) {
+  //?req.user - параметри юзера який зробив запит.
+  // console.log(req.user);
+
   //?За допомогою деструкторизація з request дістаємо динамічний параметр id.
   const { id } = req.params;
 
@@ -55,6 +59,7 @@ export async function createStudentController(req, res) {
     gender: req.body.gender,
     email: req.body.email,
     year: req.body.year,
+    parentId: req.user._id,
   };
 
   //?result.value - краще одразу з цим value працювати щоб joi сам виправляв такі помилки як Number обгорнений в лапки тощо.

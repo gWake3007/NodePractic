@@ -24,6 +24,10 @@ const studentSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    parentId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+    },
   },
   { timestamps: true },
 );

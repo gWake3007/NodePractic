@@ -74,7 +74,7 @@ export async function refreshController(req, res) {
 
   res.send({
     status: 200,
-    message: 'Login completed!',
+    message: 'Refresh completed!',
     data: { accessToken: session.accessToken },
   });
 }
