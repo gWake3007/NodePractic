@@ -23,7 +23,8 @@ export async function getStudents({
     studentQuery.where('year').lte(filter.maxYear);
   }
 
-  student.where('parentId').equals(parentId);
+  //?parentId - Потрібен для перевірки id щоб всі створенні студенти юзером були тільки у одного юзера а інші у інших.
+  studentQuery.where('parentId').equals(parentId);
 
   //?Щоб спростити иа пришвидшити код використовуємо метод Promise.all(для того щоб не писати декілька промісів а все вмістити в один).
   //?.sort({ [sortBy]: sortOrder }) - метод для сортування з деструкторизацією.

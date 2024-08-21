@@ -43,13 +43,24 @@ export async function getStudentController(req, res, next) {
   const { id } = req.params;
 
   const student = await getStudent(id);
-  if (student === null) {
+  //?Тут ми об`єднали обидві умови.
+  if (
+    student === null ||
+    student.parentId.toString() !== req.user._id.toString()
+  ) {
     // return next(createHttpError(404, 'Student not found!'));
     // return next(createHttpError[404]('Student not found!'));
     return next(createHttpError.NotFound('Student not found!'));
     //?Всі типи повернення помилки з бібліотеки http-erros.
   }
-  res.send({ status: 200, data: student });
+  //?Перевірка чи студента створював цей юзер який на нього робить запит!
+  // if (student.parentId.toString() !== req.user._id.toString()) {
+  //   return next(createHttpError.NotFound('Student not found!'));
+  //   //?Не повертаємо нижній еррор щоб другий користувач не знав що є студент с таким id але йому він не доступній!!!
+  //   return next(createHttpError(403, 'Student not allowed!'));
+  // }
+
+  res.send({ status: 200, message: 'Student with parent!', data: student });
 }
 //?next(error) - замість того щоб в цьому файлі обробляти помилку 500 в catch передаємо туди next(error) та обробляємо її в app.js
 
