@@ -1,20 +1,26 @@
 import express from 'express';
-
-import studentRoutes from './routes/students.js';
+import cors from 'cors';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import productsRouter from './routers/products.js';
 
-const app = express();
+import { env } from './utils/env.js';
 
-//?Ця middleware потрібна для того щоб розпарсити на body.Тобто щоб можна було робити POST запити.(Але вважається поганим тоном та передається через роути)
-// app.use(express.json());
+const PORT = Number(env('PORT', '3000'));
 
-//?Тут ми всі роути students підключаємо як middleware.Додаємо аргумент '/students' щоб у файлі де прописані роути його прибрати.
-app.use('/students', studentRoutes);
+export const setupServer = () => {
+  const app = express();
 
-//?Робимо middleware для запитів на неіснуючий Роут.next - ми не використовуємо тому що нам нікуди далі іти але він має бути!
-app.use(notFoundHandler);
+  app.use(express.json());
+  app.use(cors());
 
-app.use(errorHandler);
+  app.use(productsRouter);
 
-export default app;
+  app.use('*', notFoundHandler);
+
+  app.use(errorHandler);
+
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
+};

@@ -1,20 +1,11 @@
 import 'dotenv/config';
 
-import app from './app.js';
-import { initDBConnection } from './db.js';
+import { setupServer } from './server.js';
+import { initMongoConnection } from './db/initMongoConnection.js';
 
-async function bootstrap() {
-  try {
-    await initDBConnection();
-
-    const PORT = Number(process.env.PORT) || 8080;
-
-    app.listen(PORT, () => {
-      console.log(`Server started on PORT ${PORT}!`);
-    });
-  } catch (error) {
-    console.error(error);
-  }
-}
+const bootstrap = async () => {
+  await initMongoConnection();
+  setupServer();
+};
 
 bootstrap();
