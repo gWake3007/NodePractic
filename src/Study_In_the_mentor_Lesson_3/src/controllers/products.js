@@ -1,12 +1,11 @@
 import createHttpError from 'http-errors';
 
 import {
-  getProducts,
   getProduct,
+  getProducts,
   createProduct,
-  deleteProduct,
   updateProduct,
-  changeProductPrice,
+  deleteProduct,
 } from '../services/products.js';
 
 export async function getProductsController(req, res) {
@@ -51,21 +50,6 @@ export async function createProductController(req, res) {
   });
 }
 
-export async function deleteProductController(req, res, next) {
-  const { id } = req.params;
-
-  const deletedProduct = await deleteProduct(id);
-  if (deletedProduct === null) {
-    return next(createHttpError.NotFound('Product not found!'));
-  }
-
-  res.status(200).send({
-    status: 200,
-    message: `Product with id ${id} is deleted!`,
-    data: deletedProduct,
-  });
-}
-
 export async function updateProductController(req, res, next) {
   const { id } = req.params;
   const changed = req.body;
@@ -83,18 +67,17 @@ export async function updateProductController(req, res, next) {
   });
 }
 
-export async function changeStudentDutyController(req, res, next) {
+export async function deleteProductController(req, res, next) {
   const { id } = req.params;
-  const { productPrice } = req.body;
 
-  const changeOnPrice = await changeProductPrice(id, productPrice);
-
-  if (changeOnPrice === null) {
-    return next(createHttpError.NotFound('Student not found!'));
+  const deletedProduct = await deleteProduct(id);
+  if (deletedProduct === null) {
+    return next(createHttpError.NotFound('Product not found!'));
   }
+
   res.status(200).send({
     status: 200,
-    message: 'Student onDuty changed!',
-    data: changeOnPrice.value,
+    message: `Product with id ${id} is deleted!`,
+    data: deletedProduct,
   });
 }

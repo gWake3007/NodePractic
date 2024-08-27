@@ -1,15 +1,17 @@
-import { isHttpError } from 'http-errors';
+import { HttpError } from 'http-errors';
 
 export function errorHandler(error, req, res, next) {
-  if (isHttpError(error) === true) {
-    return res.status(error.status).send({
+  if (error instanceof HttpError) {
+    res.status(error.status).json({
       status: error.status,
-      message: error.message,
+      message: error.name,
+      data: error,
     });
+    return;
   }
-  console.log(error);
-
-  res.status(500).send({ message: 'Internal Server Error!' });
+  res.status(500).json({
+    status: 500,
+    message: 'Something went wrong',
+    data: error.message,
+  });
 }
-
-//?isHttpError - метод з бібліотека http-errors який перевіряє тип помилки!

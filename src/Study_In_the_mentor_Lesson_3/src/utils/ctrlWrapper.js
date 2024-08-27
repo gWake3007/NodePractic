@@ -9,5 +9,3 @@ function ctrlWrapper(controller) {
 }
 
 export { ctrlWrapper };
-
-//?ctrlWrapper - додаткова обготка обробника подій.Тобто обробник try catch та next().
