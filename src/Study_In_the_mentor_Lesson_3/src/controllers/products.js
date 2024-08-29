@@ -1,4 +1,5 @@
 import createHttpError from 'http-errors';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 import {
   getProduct,
@@ -9,6 +10,7 @@ import {
 } from '../services/products.js';
 
 export async function getProductsController(req, res) {
+  parseFilterParams(req.query);
   const products = await getProducts();
 
   res.status(200).send({
