@@ -5,6 +5,7 @@ import {
   createProductValidationSchema,
   updateProductValidationSchema,
 } from '../validation/product.js';
+import { isValid } from '../middlewares/isValid.js';
 import {
   getProductsController,
   getProductController,
@@ -17,7 +18,7 @@ const router = Router();
 
 router.get('/products', ctrlWrapper(getProductsController));
 
-router.get('/products/:id', ctrlWrapper(getProductController));
+router.get('/products/:id', isValid, ctrlWrapper(getProductController));
 
 router.post(
   '/products',
@@ -27,10 +28,11 @@ router.post(
 
 router.patch(
   '/products/:id',
+  isValid,
   validateBody(updateProductValidationSchema),
   ctrlWrapper(updateProductController),
 );
 
-router.delete('/products/:id', ctrlWrapper(deleteProductController));
+router.delete('/products/:id', isValid, ctrlWrapper(deleteProductController));
 
 export default router;
