@@ -27,4 +27,14 @@ const parseNumber = (number) => {
 export function parseFilterParams(query) {
   //   console.log(query);
   const { category, minPrice, maxPrice } = query;
+
+  const parsedCategory = parseCategory(category);
+  const parsedMinPrice = parseNumber(minPrice);
+  const parsedMaxPrice = parseNumber(maxPrice);
+
+  return {
+    category: parsedCategory,
+    minPrice: parsedMinPrice,
+    maxPrice: parsedMaxPrice,
+  };
 }

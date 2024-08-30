@@ -10,8 +10,9 @@ import {
 } from '../services/products.js';
 
 export async function getProductsController(req, res) {
-  parseFilterParams(req.query);
-  const products = await getProducts();
+  const filter = parseFilterParams(req.query);
+  //?Додаємо filter з parseFilterParams у сервіс.
+  const products = await getProducts(filter);
 
   res.status(200).send({
     status: 200,

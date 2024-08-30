@@ -1,7 +1,25 @@
 import { Product } from '../db/models/product.js';
 
-export async function getProducts() {
-  return await Product.find();
+//?В функції getProducts(filter = {}) вказано якщо фільтра в аргументі немає то буде пустий об'єкт.ВАЖЛИВО!!!
+export async function getProducts(filter = {}) {
+  const productQuery = Product.find();
+  if (filter.category) {
+    productQuery.where('category').equals(filter.category);
+  }
+
+  if (filter.minPrice) {
+    productQuery.where('price').gte(filter.minPrice);
+  }
+
+  if (filter.maxPrice) {
+    productQuery.where('price').lte(filter.maxPrice);
+  }
+
+  const products = await productQuery.exec();
+
+  return products;
+  //?Тут для фільтрації ми змінюємо сам return щоб працювала наша фільтрація!
+  // return await Product.find();
 }
 
 //?findOne - схожий на метод findById але він повертає об'єкт параметрів.
