@@ -1,3 +1,5 @@
+//?parseCategory - функція для парсингу категорії.
+
 const parseCategory = (category) => {
   const isString = typeof category === 'string';
   if (!isString) return;
@@ -6,6 +8,8 @@ const parseCategory = (category) => {
 
   if (isCategory(category)) return category;
 };
+
+//?parseNumber - функція для парсингу номеру(за яким буде відбуватись сортування по minPrice та maxPrice).
 
 const parseNumber = (number) => {
   const isString = typeof number === 'string';
@@ -17,6 +21,8 @@ const parseNumber = (number) => {
 
   return parsedNumber;
 };
+
+//?parseFilterParams - функція самого фільтру де використовуються дві функції вище!
 
 export function parseFilterParams(query) {
   //   console.log(query);
