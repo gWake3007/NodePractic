@@ -2,8 +2,16 @@ import { Product } from '../db/models/product.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 //?В функції getProducts(filter = {}) вказано якщо фільтра в аргументі немає то буде пустий об'єкт.ВАЖЛИВО!!!
-export async function getProducts(filter = {}) {
+
+export async function getProducts({ page, perPage, filter = {} }) {
+  const limit = perPage;
+  const skip = (page - 1) * perPage;
+
   const productQuery = Product.find();
+  const productCount = await Product.find()
+    .merge(productQuery)
+    .countDocuments();
+
   if (filter.category) {
     productQuery.where('category').equals(filter.category);
   }
@@ -16,9 +24,13 @@ export async function getProducts(filter = {}) {
     productQuery.where('price').lte(filter.maxPrice);
   }
 
-  const products = await productQuery.exec();
+  const products = await productQuery.skip(skip).limit(limit).exec();
+  const paginationData = calculatePaginationData(productCount, perPage, page);
 
-  return products;
+  return {
+    data: products,
+    ...paginationData,
+  };
   //?Тут для фільтрації ми змінюємо сам return щоб працювала наша фільтрація!
   // return await Product.find();
 }
