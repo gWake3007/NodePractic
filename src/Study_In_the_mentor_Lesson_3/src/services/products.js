@@ -1,4 +1,5 @@
 import { Product } from '../db/models/product.js';
+import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 //?В функції getProducts(filter = {}) вказано якщо фільтра в аргументі немає то буде пустий об'єкт.ВАЖЛИВО!!!
 export async function getProducts(filter = {}) {
