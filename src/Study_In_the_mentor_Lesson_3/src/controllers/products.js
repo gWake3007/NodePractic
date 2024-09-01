@@ -1,6 +1,7 @@
 import createHttpError from 'http-errors';
 import { parseFilterParams } from '../utils/parseFilterParams.js';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
 
 import {
   getProduct,
@@ -13,9 +14,17 @@ import {
 export async function getProductsController(req, res) {
   const { page, perPage } = parsePaginationParams(req.query);
 
+  const { sortBy, sortOrder } = parseSortParams(req.query);
+
   const filter = parseFilterParams(req.query);
   //?Додаємо filter з parseFilterParams у сервіс.
-  const products = await getProducts({ page, perPage, filter });
+  const products = await getProducts({
+    page,
+    perPage,
+    sortBy,
+    sortOrder,
+    filter,
+  });
 
   res.status(200).send({
     status: 200,

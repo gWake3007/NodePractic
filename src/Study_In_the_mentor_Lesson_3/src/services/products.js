@@ -1,9 +1,16 @@
 import { Product } from '../db/models/product.js';
+import { SORT_ORDER } from '../constants/index.js';
 import { calculatePaginationData } from '../utils/calculatePaginationData.js';
 
 //?В функції getProducts(filter = {}) вказано якщо фільтра в аргументі немає то буде пустий об'єкт.ВАЖЛИВО!!!
 
-export async function getProducts({ page, perPage, filter = {} }) {
+export async function getProducts({
+  page,
+  perPage,
+  sortOrder = SORT_ORDER.ASC,
+  sortBy = '_id',
+  filter = {},
+}) {
   const limit = perPage;
   const skip = (page - 1) * perPage;
 
@@ -24,7 +31,11 @@ export async function getProducts({ page, perPage, filter = {} }) {
     productQuery.where('price').lte(filter.maxPrice);
   }
 
-  const products = await productQuery.skip(skip).limit(limit).exec();
+  const products = await productQuery
+    .skip(skip)
+    .limit(limit)
+    .sort({ [sortBy]: sortOrder })
+    .exec();
   const paginationData = calculatePaginationData(productCount, perPage, page);
 
   return {
