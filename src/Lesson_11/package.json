@@ -1,5 +1,5 @@
 {
-  "name": "lesson-10",
+  "name": "lesson-11",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,9 +15,12 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
+    "handlebars": "^4.7.8",
     "http-errors": "^2.0.0",
     "joi": "^17.13.3",
-    "mongoose": "^8.5.1"
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.1",
+    "nodemailer": "^6.9.14"
   },
   "devDependencies": {
     "nodemon": "^3.1.4"

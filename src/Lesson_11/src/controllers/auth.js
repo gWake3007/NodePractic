@@ -81,3 +81,7 @@ export async function refreshController(req, res) {
 
 //?res.cookie('refreshToken', session.refreshToken, { httpOnly: true }); в кукі передаємо refreshToken і в опції вказуємо httpOnly: true щоб кукі передавалися тільки http запитами.
 //?expires: session.refreshTokenValidUntil - опція в якій ми вказуємо коли refreshToken закінчується!
+
+export async function requestResetEmailController(req, res) {
+  res.send('Request Reset Email');
+}
