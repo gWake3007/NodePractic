@@ -3,6 +3,7 @@ import {
   loginUser,
   logoutUser,
   refreshUserSession,
+  requestResetEmail,
 } from '../services/auth.js';
 
 export async function registerController(req, res) {
@@ -83,5 +84,13 @@ export async function refreshController(req, res) {
 //?expires: session.refreshTokenValidUntil - опція в якій ми вказуємо коли refreshToken закінчується!
 
 export async function requestResetEmailController(req, res) {
-  res.send('Request Reset Email');
+  const { email } = req.body;
+
+  await requestResetEmail(email);
+
+  res.send({
+    status: 200,
+    message: 'Reset email was send successfully',
+    data: {},
+  });
 }
