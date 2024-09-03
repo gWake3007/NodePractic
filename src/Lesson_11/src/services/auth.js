@@ -1,11 +1,11 @@
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
-import jvt from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import createHttpError from 'http-errors';
 import { User } from '../models/user.js';
 import { Session } from '../models/session.js';
 
-import { JVT } from '../constants/index.js';
+import { JWT } from '../constants/index.js';
 
 import {
   ACCESS_TOKEN_TTL,
@@ -95,12 +95,12 @@ export async function requestResetEmail(email) {
   }
 
   //?expiresIn - опція яка вказує на час існування токену.
-  const resetToken = jvt.sign(
+  const resetToken = jwt.sign(
     {
       sub: user._id,
       email: user.email,
     },
-    JVT.SECRET,
+    JWT.SECRET,
     { expiresIn: '15m' },
   );
 
@@ -110,4 +110,22 @@ export async function requestResetEmail(email) {
     subject: 'Reset your password',
     html: `<h1>Reset your password TITLE H1<p>Please open this<a href="http://www.google.com/reset-password?token=${resetToken}">link</a></p></h1>`,
   });
+}
+
+export async function resetPassword(password, token) {
+  try {
+    //?decoded - Показує нам всю розшифровану інформацію з токену!(Тобто розкодований payload)
+    const decoded = jwt.verify(token, JVT.SECRET);
+    console.log(decoded);
+
+    const user = await User.findOne({ _id: decoded.sub, email: decoded.email });
+
+    if (user === null) {
+      throw createHttpError(404, 'User not found!');
+    }
+  } catch (error) {
+    throw console.log(error);
+  }
+  //?Тут в консолі нам покузують наш НОВИЙ ПАРОЛЬ та наш токен за допомогою якого ми і міняємо пароль!
+  // console.log({ password, token });
 }

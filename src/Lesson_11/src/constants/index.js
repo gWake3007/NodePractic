@@ -15,6 +15,6 @@ export const SMTP = {
   FROM_EMAIL: process.env.SMTP_FROM_EMAIL,
 };
 
-export const JVT = {
+export const JWT = {
   SECRET: process.env.JWT_SECRET,
 };

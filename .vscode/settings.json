@@ -4,6 +4,7 @@
     "espree",
     "esquery",
     "esrecurse",
+    "jwt",
     "next",
     "nodepractic",
     "pino",

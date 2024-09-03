@@ -13,7 +13,7 @@ const transport = nodemailer.createTransport({
 });
 
 export function sendMail(message) {
-  //?Сам результат відправлення листа та доп. дані.
-  console.log(message);
+  //?Сам результат відправлення листа та посилання.
+  // console.log(message);
   return transport.sendMail(message);
 }
