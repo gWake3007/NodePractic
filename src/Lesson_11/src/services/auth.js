@@ -1,3 +1,8 @@
+//?Використовуємо файлову систему для того щоб считати шаблон з handlebars який знаходиться у нас у файлі reset-password.hbs
+import fs from 'node:fs';
+import path from 'node:path';
+import handlebars from 'handlebars';
+
 import crypto from 'node:crypto';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -104,18 +109,36 @@ export async function requestResetEmail(email) {
     { expiresIn: '15m' },
   );
 
-  await sendMail({
-    from: SMTP.FROM_EMAIL,
-    to: email,
-    subject: 'Reset your password',
-    html: `<h1>Reset your password TITLE H1<p>Please open this<a href="http://www.google.com/reset-password?token=${resetToken}">link</a></p></h1>`,
-  });
+  //?templateSource - Тут считуємо файл reset-password.hbs
+  const templateSource = fs.readFileSync(
+    path.resolve('src/templates/reset-password.hbs'),
+    {
+      encoding: 'utf-8',
+    },
+  );
+
+  //?Передаємо в handlebars наш шаблон.
+  const template = handlebars.compile(templateSource);
+
+  //?Передаємо змінні в наш html шаблон. Це ім'я користувача і сам токен.
+  const html = template({ name: user.name, resetToken });
+
+  try {
+    await sendMail({
+      from: SMTP.FROM_EMAIL,
+      to: email,
+      subject: 'Reset your password',
+      html,
+    });
+  } catch {
+    throw createHttpError(500, 'Cannot send email');
+  }
 }
 
 export async function resetPassword(password, token) {
   try {
     //?decoded - Показує нам всю розшифровану інформацію з токену!(Тобто розкодований payload)
-    const decoded = jwt.verify(token, JVT.SECRET);
+    const decoded = jwt.verify(token, JWT.SECRET);
     console.log(decoded);
 
     const user = await User.findOne({ _id: decoded.sub, email: decoded.email });
@@ -123,8 +146,22 @@ export async function resetPassword(password, token) {
     if (user === null) {
       throw createHttpError(404, 'User not found!');
     }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await User.findOneAndUpdate(
+      { _id: user._id },
+      { password: hashedPassword },
+    );
   } catch (error) {
-    throw console.log(error);
+    if (
+      error.name === 'TokenExpiredError' ||
+      error.name === 'JsonWebTokenError'
+    ) {
+      throw createHttpError(401, 'Token error!');
+    }
+    //?Тут помилку викидуємо якщо в нас якась інша помилка і middleware її зловить.
+    throw error;
   }
   //?Тут в консолі нам покузують наш НОВИЙ ПАРОЛЬ та наш токен за допомогою якого ми і міняємо пароль!
   // console.log({ password, token });
