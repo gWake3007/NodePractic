@@ -8,6 +8,7 @@ import {
   changeStudentDutyController,
 } from '../controllers/students.js';
 
+import { upload } from '../middlewares/upload.js';
 import { ctrlWrapper } from '../utils/ctrlWrapper.js';
 import { isValidId } from '../middlewares/isValidId.js';
 import { validateBody } from '../middlewares/validateBody.js';
@@ -21,10 +22,12 @@ router.get('/', ctrlWrapper(getStudentsController));
 
 router.get('/:id', isValidId, ctrlWrapper(getStudentController));
 
+//?upload.single('photo') - single метод для завантаження одного файлу(зображення).Назва файлу довільна.
 router.post(
   '/',
   jsonParser,
-  validateBody(studentSchema),
+  upload.single('photo'),
+  // validateBody(studentSchema),
   ctrlWrapper(createStudentController),
 );
 

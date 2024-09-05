@@ -1,4 +1,4 @@
-import path from 'mode:path';
+import path from 'node:path';
 
 import multer from 'multer';
 
@@ -9,8 +9,9 @@ const storage = multer.diskStorage({
     cb(null, path.resolve('src', 'tmp'));
   },
   filename: function (req, file, cb) {
-    console.log(file);
-    cb(null, 'file.txt');
+    //?Виводимо в консоль інформацію про наше зображення.
+    // console.log(file);
+    cb(null, file.originalname);
   },
 });
 
