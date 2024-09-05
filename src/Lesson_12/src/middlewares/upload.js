@@ -11,7 +11,12 @@ const storage = multer.diskStorage({
   filename: function (req, file, cb) {
     //?Виводимо в консоль інформацію про наше зображення.
     // console.log(file);
-    cb(null, file.originalname);
+    //?uniqueSuffix - Змінна яка нажає кожному файлу(зображенню) УНІКАЛЬНЕ значення.Але цей приклад не корректний!Розширення можуть бути інші!
+    // const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    // cb(null, file.fieldname + '-' + uniqueSuffix + '.jpg');
+    //?Цей спосіб більш корректний. Тому що рандомне значення з датою ставиться з початку.А формат файлу той же що і приходить.
+    const uniquePrefix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    cb(null, uniquePrefix + '-' + file.originalname);
   },
 });
 

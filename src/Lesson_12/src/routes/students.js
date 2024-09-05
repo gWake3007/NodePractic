@@ -27,7 +27,7 @@ router.post(
   '/',
   jsonParser,
   upload.single('photo'),
-  // validateBody(studentSchema),
+  validateBody(studentSchema),
   ctrlWrapper(createStudentController),
 );
 

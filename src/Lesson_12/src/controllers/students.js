@@ -65,12 +65,16 @@ export async function getStudentController(req, res, next) {
 //?next(error) - замість того щоб в цьому файлі обробляти помилку 500 в catch передаємо туди next(error) та обробляємо її в app.js
 
 export async function createStudentController(req, res) {
+  //?Показуємо в консолі інформацію про наш файл(фото).
+  // console.log(req.file);
+
   const student = {
     name: req.body.name,
     gender: req.body.gender,
     email: req.body.email,
     year: req.body.year,
     parentId: req.user._id,
+    photo: req.file,
   };
 
   //?result.value - краще одразу з цим value працювати щоб joi сам виправляв такі помилки як Number обгорнений в лапки тощо.
