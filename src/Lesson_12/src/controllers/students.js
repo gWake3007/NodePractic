@@ -1,3 +1,6 @@
+import * as fs from 'node:fs/promises';
+import path from 'node:path';
+
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
 
@@ -67,14 +70,27 @@ export async function getStudentController(req, res, next) {
 export async function createStudentController(req, res) {
   //?Показуємо в консолі інформацію про наш файл(фото).
   // console.log(req.file);
+  let photo = null;
 
+  //?fs.rename() - змінює назву файлу але може і переміщувати їх в потрібну нам директорію(для чого ми його і використовуємо)
+  //?Тут ми файл з тичасової папки tmp переміщуємо до public/avatars.Також перевіряємо чи передавали файл взагалі.
+  if (typeof req.file !== 'undefined') {
+    await fs.rename(
+      req.file.path,
+      path.resolve('src', 'public/avatars', req.file.filename),
+    );
+
+    photo = `http://localhost:5000/avatars/${req.file.filename}`;
+  }
+
+  //?photo - береться з нашого серверу для створення нашого студента!
   const student = {
     name: req.body.name,
     gender: req.body.gender,
     email: req.body.email,
     year: req.body.year,
     parentId: req.user._id,
-    photo: req.file,
+    photo,
   };
 
   //?result.value - краще одразу з цим value працювати щоб joi сам виправляв такі помилки як Number обгорнений в лапки тощо.

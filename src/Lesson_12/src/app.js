@@ -1,3 +1,5 @@
+import path from 'node:path';
+
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
@@ -8,6 +10,9 @@ import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
 
 const app = express();
+
+//?Тут ми даємо можливість переглядати зображення через Postman.(Спеціально перемо його поверх всіх роутів)
+app.use('/avatars', express.static(path.resolve('src', 'public/avatars')));
 
 //?cookieParser - підключається глобально перед роутом authRoures!!
 app.use(cookieParser());
