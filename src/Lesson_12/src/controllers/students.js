@@ -3,6 +3,9 @@ import path from 'node:path';
 
 import createHttpError from 'http-errors';
 import { parsePaginationParams } from '../utils/parsePaginationParams.js';
+import { parseSortParams } from '../utils/parseSortParams.js';
+import { parseFilterParams } from '../utils/parseFilterParams.js';
+import { uploadToCloudinary } from '../utils/uploadToCloudinary.js';
 
 import {
   getStudents,
@@ -12,8 +15,6 @@ import {
   updateStudent,
   changeStudentDuty,
 } from '../services/students.js';
-import { parseSortParams } from '../utils/parseSortParams.js';
-import { parseFilterParams } from '../utils/parseFilterParams.js';
 
 export async function getStudentsController(req, res) {
   //?Через деструкторизацію дістаємо властивості з функції parsePaginationParams.
@@ -75,12 +76,18 @@ export async function createStudentController(req, res) {
   //?fs.rename() - змінює назву файлу але може і переміщувати їх в потрібну нам директорію(для чого ми його і використовуємо)
   //?Тут ми файл з тичасової папки tmp переміщуємо до public/avatars.Також перевіряємо чи передавали файл взагалі.
   if (typeof req.file !== 'undefined') {
-    await fs.rename(
-      req.file.path,
-      path.resolve('src', 'public/avatars', req.file.filename),
-    );
+    //?Перевіряємо значення за замовчуванням чи зберігати на Cloudinary наш файл(зображення, відео).
+    if (process.env.ENABLE_CLOUDINARY === 'true') {
+      const result = await uploadToCloudinary(req.file.path);
+      console.log(result);
+    } else {
+      await fs.rename(
+        req.file.path,
+        path.resolve('src', 'public/avatars', req.file.filename),
+      );
 
-    photo = `http://localhost:5000/avatars/${req.file.filename}`;
+      photo = `http://localhost:5000/avatars/${req.file.filename}`;
+    }
   }
 
   //?photo - береться з нашого серверу для створення нашого студента!
