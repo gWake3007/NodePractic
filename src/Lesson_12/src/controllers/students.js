@@ -83,6 +83,8 @@ export async function createStudentController(req, res) {
       const result = await uploadToCloudinary(req.file.path);
       //?result - тут ми переглядаємо в консолі всю інформацію про результат. Та додаємо потрібну url до нашого photo.
       // console.log(result);
+      //?Видаляєм файл так як ми його завантажуємо на хмару.Cloudinary.
+      await fs.unlink(req.file.path);
 
       photo = result.secure_url;
     } else {
