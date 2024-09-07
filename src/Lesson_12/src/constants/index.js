@@ -1,3 +1,5 @@
+import 'dotenv/config';
+
 export const SORT_ORDER = {
   ASC: 'asc',
   DESC: 'desc',
@@ -17,4 +19,11 @@ export const SMTP = {
 
 export const JWT = {
   SECRET: process.env.JWT_SECRET,
+};
+
+export const CLOUDINARY = {
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_API_SECRET: process.env.CLOUDINARY_API_SECRET,
+  ENABLE_CLOUDINARY: process.env.ENABLE_CLOUDINARY,
 };
