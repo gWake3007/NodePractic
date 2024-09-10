@@ -103,3 +103,7 @@ export async function resetPasswordController(req, res) {
 
   res.send({ status: 200, message: 'Password reset successfully', data: {} });
 }
+
+export async function getOAuthURLController(req, res) {
+  res.send('Get OAuth URL!');
+}
