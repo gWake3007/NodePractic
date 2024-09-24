@@ -1,3 +1,6 @@
+#gitignore
+google-oauth-credentials.json
+
 # Logs
 logs
 *.log
