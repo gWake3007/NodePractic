@@ -115,3 +115,7 @@ export async function getOAuthURLController(req, res) {
     data: { url },
   });
 }
+
+export async function confirmOAuthController(req, res) {
+  res.send('Code send');
+}
