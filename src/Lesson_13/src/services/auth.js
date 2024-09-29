@@ -166,3 +166,7 @@ export async function resetPassword(password, token) {
   //?Тут в консолі нам покузують наш НОВИЙ ПАРОЛЬ та наш токен за допомогою якого ми і міняємо пароль!
   // console.log({ password, token });
 }
+
+export async function loginOrRegisterWithGoogle(code) {
+  console.log(code);
+}

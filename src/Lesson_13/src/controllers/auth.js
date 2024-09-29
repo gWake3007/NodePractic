@@ -5,6 +5,7 @@ import {
   refreshUserSession,
   requestResetEmail,
   resetPassword,
+  loginOrRegisterWithGoogle,
 } from '../services/auth.js';
 
 import { generateAuthUrl } from '../utils/gooleOAuth2.js';
@@ -117,5 +118,9 @@ export async function getOAuthURLController(req, res) {
 }
 
 export async function confirmOAuthController(req, res) {
-  res.send('Code send');
+  const { code } = req.body;
+
+  await loginOrRegisterWithGoogle(code);
+
+  res.send('Confirm OAuth');
 }
