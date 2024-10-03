@@ -12,13 +12,15 @@ import { Session } from '../models/session.js';
 
 import { JWT } from '../constants/index.js';
 
+import { sendMail } from '../utils/sendMail.js';
+
+import { validateCode } from '../utils/gooleOAuth2.js';
+
 import {
   ACCESS_TOKEN_TTL,
   REFRESH_TOKEN_TTL,
   SMTP,
 } from '../constants/index.js';
-
-import { sendMail } from '../utils/sendMail.js';
 
 export async function registerUser(user) {
   const maybeUser = await User.findOne({ email: user.email });
@@ -168,5 +170,50 @@ export async function resetPassword(password, token) {
 }
 
 export async function loginOrRegisterWithGoogle(code) {
-  console.log(code);
+  const accessToken = crypto.randomBytes(30).toString('base64');
+  const refreshToken = crypto.randomBytes(30).toString('base64');
+
+  const ticket = await validateCode(code);
+  console.log(ticket);
+
+  const payload = ticket.getPayload();
+
+  if (typeof payload === 'undefined') {
+    throw createHttpError(401, 'Unauthorized Payload!');
+  }
+
+  const user = await User.findOne({ email: payload.email });
+
+  //?password - генеруємо фейковий пароль(тому що при логіні через гугл він не потрібен).
+  const password = bcrypt.hash(crypto.randomBytes(30).toString('base64'), 10);
+
+  //?Якщо в нас данного користувача немає то ми його створюємо тільки вже через гугл акаунт.ВАЖЛИВО!!!
+  if (user === null) {
+    const createdUser = await User.create({
+      email: payload.email,
+      name: payload.name,
+      password,
+    });
+
+    return Session.create({
+      userId: createdUser._id,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+      accessTokenValidUntil: new Date(Date.now() + ACCESS_TOKEN_TTL),
+      refreshTokenValidUntil: new Date(Date.now() + REFRESH_TOKEN_TTL),
+    });
+  }
+  await Session.deleteOne({ userId: user._id });
+
+  return Session.create({
+    userId: user._id,
+    accessToken,
+    refreshToken,
+    accessTokenValidUntil: new Date(Date.now() + ACCESS_TOKEN_TTL),
+    refreshTokenValidUntil: new Date(Date.now() + REFRESH_TOKEN_TTL),
+  });
+  //?Переглядаємо наш payload.
+  // console.log(payload);
+  //?Дивимось сам код.
+  // console.log(code);
 }

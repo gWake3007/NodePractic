@@ -110,7 +110,7 @@ export async function resetPasswordController(req, res) {
 export async function getOAuthURLController(req, res) {
   const url = generateAuthUrl();
 
-  res.send({
+  res.json({
     status: 200,
     message: 'Successfully get Google OAuth URL!',
     data: { url },
@@ -120,7 +120,21 @@ export async function getOAuthURLController(req, res) {
 export async function confirmOAuthController(req, res) {
   const { code } = req.body;
 
-  await loginOrRegisterWithGoogle(code);
+  const session = await loginOrRegisterWithGoogle(code);
 
-  res.send('Confirm OAuth');
+  res.cookie('refreshToken', session.refreshToken, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.cookie('sessionId', session._id, {
+    httpOnly: true,
+    expires: session.refreshTokenValidUntil,
+  });
+
+  res.send({
+    status: 200,
+    message: 'Logion with Google completed!',
+    data: { accessToken: session.accessToken },
+  });
 }
