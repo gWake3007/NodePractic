@@ -14,9 +14,10 @@ tags:
 servers:
   - url: http://localhost:3000
   - url: https://example.com/api/v1
-paths: /students/{id}:
-  get:
-    $ref: ../swagger/paths/students/{id}/get.yaml
+paths:
+  /students/{id}:
+    get:
+      $ref: ../swagger/paths/students/{id}/get.yaml
 components:
   securitySchemes:
     bearerAuth:

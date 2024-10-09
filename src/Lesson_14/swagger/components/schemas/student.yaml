@@ -1,0 +1,46 @@
+type: object
+required:
+  - _id
+  - name
+  - gender
+  - email
+  - year
+  - onDuty
+  - parentId
+  - photo
+properties:
+  _id:
+    description: "Student's id"
+    type: string
+    example: 77b0b9583e13abe6843d4a18
+  name:
+    description: "Student's name"
+    type: string
+    example: 'Herrington Billy'
+  gender:
+    description: "Student's gender"
+    type: string
+    enum: ['male', 'female']
+    example: male
+  email:
+    description: "Student's email"
+    type: string
+    example: 'HerringtonBilly@gmail.com'
+  year:
+    description: "Student's birth year"
+    type: number
+    example: 1980
+  onDuty:
+    description: 'Whether student on duty'
+    type: boolean
+    example: false
+    default: false
+  parentId:
+    description: "Student's parent id"
+    type: string
+    example: 77bf76be57a6f7e968a0bd30
+  photo:
+    description: "Student's photo"
+    type: string
+    example: 'https://res.cloudinary.com/dfatbogqt/image/upload/v1725707501/wi0inkptfwcq7p3cyrs9.jpg'
+    default: null
