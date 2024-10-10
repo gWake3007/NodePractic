@@ -9,16 +9,16 @@ content:
         - data
       properties:
         status:
-        type: integer
-        example: 401
-      message:
-        type: string
-        example: Unauthorized Error
-      data:
-        type: object
-        required:
-          - message
-        properties:
-          message:
-            type: string
-            example: 'Access token expired'
+          type: integer
+          example: 401
+        message:
+          type: string
+          example: Unauthorized Error
+        data:
+          type: object
+          required:
+            - message
+          properties:
+            message:
+              type: string
+              example: 'Access token expired'

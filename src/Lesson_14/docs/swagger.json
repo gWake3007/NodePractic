@@ -35,7 +35,7 @@
         ],
         "summary": "Get student by id",
         "operationId": "getStudent",
-        "description": "Get student by id description",
+        "description": "Get student by id description thirty character need for description",
         "security": [
           {
             "bearerAuth": []
@@ -46,9 +46,10 @@
             "in": "path",
             "name": "id",
             "required": true,
-            "schema": null,
-            "type": "string",
-            "example": "77caeffefccb85e9c6cdd9cf"
+            "schema": {
+              "type": "string",
+              "example": "77caeffefccb85e9c6cdd9cf"
+            }
           }
         ],
         "responses": {
@@ -200,23 +201,24 @@
                 "data"
               ],
               "properties": {
-                "status": null,
-                "type": "integer",
-                "example": 401
-              },
-              "message": {
-                "type": "string",
-                "example": "Unauthorized Error"
-              },
-              "data": {
-                "type": "object",
-                "required": [
-                  "message"
-                ],
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "example": "Access token expired"
+                "status": {
+                  "type": "integer",
+                  "example": 401
+                },
+                "message": {
+                  "type": "string",
+                  "example": "Unauthorized Error"
+                },
+                "data": {
+                  "type": "object",
+                  "required": [
+                    "message"
+                  ],
+                  "properties": {
+                    "message": {
+                      "type": "string",
+                      "example": "Access token expired"
+                    }
                   }
                 }
               }

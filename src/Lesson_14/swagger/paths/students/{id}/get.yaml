@@ -2,7 +2,7 @@ tags:
   - Students
 summary: Get student by id
 operationId: getStudent
-description: 'Get student by id description'
+description: 'Get student by id description thirty character need for description'
 security:
   - bearerAuth: []
 parameters:
@@ -10,8 +10,8 @@ parameters:
     name: id
     required: true
     schema:
-    type: string
-    example: 77caeffefccb85e9c6cdd9cf
+      type: string
+      example: 77caeffefccb85e9c6cdd9cf
 responses:
   '200':
     description: 'Get student by id description status 200'
