@@ -74,7 +74,6 @@
                       "example": "Successfully found student with id 77caeffefccb85e9c6cdd9cf!"
                     },
                     "data": {
-                      "type": "object",
                       "$ref": "#/components/schemas/student"
                     }
                   }
@@ -113,6 +112,106 @@
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/students": {
+      "post": {
+        "tags": [
+          "Students"
+        ],
+        "summary": "Create student",
+        "operationId": "createStudent",
+        "description": "Create student description thirty character need for description",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "gender",
+                  "email",
+                  "year"
+                ],
+                "properties": {
+                  "name": {
+                    "description": "Students name",
+                    "type": "string",
+                    "example": "John Joni"
+                  },
+                  "gender": {
+                    "description": "Students gender",
+                    "type": "string",
+                    "enum": [
+                      "male",
+                      "female"
+                    ],
+                    "example": "male"
+                  },
+                  "email": {
+                    "description": "Student's email",
+                    "type": "string",
+                    "example": "HerringtonBilly@gmail.com"
+                  },
+                  "year": {
+                    "description": "Student's birth year",
+                    "type": "number",
+                    "example": 1980
+                  },
+                  "onDuty": {
+                    "description": "Whether student on duty",
+                    "type": "boolean",
+                    "example": false
+                  },
+                  "photo": {
+                    "description": "Student's photo",
+                    "type": "string",
+                    "example": "https://res.cloudinary.com/dfatbogqt/image/upload/v1725707501/wi0inkptfwcq7p3cyrs9.jpg",
+                    "default": null
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created a student",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "status",
+                    "message",
+                    "data"
+                  ],
+                  "properties": {
+                    "status": {
+                      "type": "integer",
+                      "example": 201
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Successfully created a student"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/student"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
           }
         }
       }

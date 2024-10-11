@@ -18,6 +18,9 @@ paths:
   /students/{id}:
     get:
       $ref: ../swagger/paths/students/{id}/get.yaml
+  /students:
+    post:
+      $ref: ../swagger/paths/students/post.yaml
 components:
   securitySchemes:
     bearerAuth:
