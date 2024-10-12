@@ -1,5 +1,7 @@
 import path from 'node:path';
 
+import cors from 'cors';
+
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
@@ -8,8 +10,15 @@ import studentRoutes from './routes/students.js';
 import { auth } from './middlewares/auth.js';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { notFoundHandler } from './middlewares/notFoundHandler.js';
+import { swaggerDocs } from './middlewares/swaggerDocs.js';
 
 const app = express();
+
+//?cors() - тут потрібен для порту localhost:3000 або 127.0.0.1:3000 щоб уникнути помилок(це два аналогічні порти але браузер їх бачить по різному)
+app.use(cors());
+
+//?swaggerDocs - Використовується коли ми робимо запит на api-docs.
+app.use('/api-docs', swaggerDocs());
 
 //?Тут ми даємо можливість переглядати зображення через Postman.(Спеціально перемо його поверх всіх роутів)
 app.use('/avatars', express.static(path.resolve('src', 'public/avatars')));
